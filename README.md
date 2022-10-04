@@ -15,7 +15,7 @@ O **sensor giroscópio** ([MPU6050](https://pdf1.alldatasheet.com/datasheet-pdf/
 
 ```mermaid
 
-  graph TD;
+  graph LR;
       A[Bateria];
 	  B((Regulador-6v));
 	  C((Regulador-5v));
@@ -34,7 +34,7 @@ O **sensor giroscópio** ([MPU6050](https://pdf1.alldatasheet.com/datasheet-pdf/
       B-->C;	
       C-->D;
       C-->E;
-	  E--->G;
+	  E-->G;
 	  C-->G;
 	  G-->F;
 	  G-->H;
@@ -50,6 +50,41 @@ O **sensor giroscópio** ([MPU6050](https://pdf1.alldatasheet.com/datasheet-pdf/
 	  C-->M;
 	  H-->E;
 	  
+```
+
+
+## Código Follow 
+
+O Lightning possui dois botões, sendo um deles responsável pela calibração. Esse processo é responsável por definir o que o robô deve entender como sendo branco ou preto. Lembrando que o sensor QRE-1113 é um sensor de refletância. Dessa forma, quando este identifica a cor "preta", o sensor informa um valor alto e, no caso caso do "branco", um valor baixo. O código da calibração e do controle de velocidade dos motores já encontram-se comentadas no código atual do follow.  
+
+Já em relação ao PID (Proporcional, Derivado e Integral), ele é um dos esquemas de controle mais comuns. Há muitas maneiras de ajustar um loop PID.
+
+Pense no PID como uma simples mola. Uma mola tem um comprimento original que, quando perturbada por expansão ou contração, tende a recuperar seu comprimento original no menor tempo possível. Da mesma forma, um algoritmo PID em um sistema possui um valor definido de uma determinada grandeza física a ser controlada, chamada de 'ponto de ajuste', que quando alterado por algum motivo, o sistema controla os outros recursos necessários nele, para recuperar ao ponto de ajuste original no menor tempo possível. Os controladores PID são usados ​​sempre que há necessidade de controlar uma grandeza física e torná-la igual a um valor especificado. 
+
+Para melhor entender, sugerimos a leitura das informações disponibilizadas por esse [site](https://www.instructables.com/Line-Follower-Robot-PID-Control-Android-Setup/).
+
+Quanto ao funcionamento geral e básico do código, deve-se compreender o esquemático abaixo:
+```mermaid
+graph LR;
+A(Botão 1 - Calibração);
+B(Botão 2 - Start);
+C[Sersor borda esquerdo];
+D(Início/Fim da curva);
+E[Sensor borda direito];
+F(Início/Fim circuito);
+G[Sensores de linha];
+H{Somente os dois sensores do meio estão lendo a linha?};
+I(Erro);
+J(Correção da velocidade dos motores - PID);
+K((Leitura dos sensores));
+L(Motor gira sem correção de velocidade);
+
+A-->B-->K-->C-->D;
+K-->E-->F;
+K-->G-->H;
+H--->|Sim|L;
+H-->|Não|I;
+I-->J;
 ```
 
 ## ST-Link / Windows
@@ -119,42 +154,3 @@ Dessa forma, o PlataformIO já vai instalar as bibliotecas adequadas.
 `Arquivo -> Abrir pasta -> <Selecione a pasta follow_line>` ou  
 `Vá até a pasta de repositório criada -> clique com o botão direito sobre a pasta do follow -> abrir com o Code`  
 
-
-```mermaid
-
-  graph LR;
-      A[Bateria];
-	  B((Regulador-6v));
-	  C((Regulador-5v));
-	  D((Regulador-3.3v));
-	  E[Ponte-H];
-	  F[Motor];
-	  G[Encoder];
-	  H{Microcontrolador};
-	  I(Sensores de borda);
-	  J[Multiplexador]
-	  K[Leds];
-	  L(Giroscópio);
-	  M(Bluetooth);
-
-	  A--->|Chave on/off|B;
-      B-->C;	
-      C-->D;
-      C-->E;
-	  E--->G;
-	  C-->G;
-	  G-->F;
-	  G-->H;
-	  C--->I;
-	  I--->|Sensores frontais|J;
-	  D-->J;
-	  J-->H;
-	  H-->K;
-	  L-->H;
-	  D-->L;
-	  M-->H;
-	  I-->|Sensores laterais|H;
-	  C-->M;
-	  H-->E;
-	  
-```
