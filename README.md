@@ -52,6 +52,7 @@ O **sensor giroscópio** ([MPU6050](https://pdf1.alldatasheet.com/datasheet-pdf/
 	  
 ```
 
+
 ## Código Follow 
 
 O Lightning possui dois botões, sendo um deles responsável pela calibração. Esse processo é responsável por definir o que o robô deve entender como sendo branco ou preto. Lembrando que o sensor QRE-1113 é um sensor de refletância. Dessa forma, quando este identifica a cor "preta", o sensor informa um valor alto e, no caso caso do "branco", um valor baixo. O código da calibração e do controle de velocidade dos motores já encontram-se comentadas no código atual do follow.  
@@ -85,6 +86,7 @@ H--->|Sim|L;
 H-->|Não|I;
 I-->J;
 ```
+
 ## ST-Link / Windows
 Abaixo encontram-se os procedimentos para conseguir passar corretamente o código para o STM32 do Lightning, utilizando-se o VS Code. Tais procedimentos também podem ser visualizados no vídeo [tutorial](https://www.youtube.com/watch?v=mOzsBYo3h4M&ab_channel=TechHelp).
 
